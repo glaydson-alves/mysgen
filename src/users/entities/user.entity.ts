@@ -12,10 +12,10 @@ export class User {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column()
-    full_name: string;
+    @Column({ nullable: false })
+    displayName: string;
 
-    @Column()
+    @Column({ nullable: false })
     email: string;
 
     @Column()
@@ -24,7 +24,7 @@ export class User {
     @Column({type: 'enum', enum: UserRole, default: UserRole.USER})
     role: UserRole;
 
-    @Column()
+    @Column({ default: '', type: 'text' })
     url_avatar: string;
 
     @CreateDateColumn()
