@@ -19,7 +19,7 @@ export class User {
     email: string;
 
     @Column()
-    password_hash: string;
+    password: string;
 
     @Column({type: 'enum', enum: UserRole, default: UserRole.USER})
     role: UserRole;
