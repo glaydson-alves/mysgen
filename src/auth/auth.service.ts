@@ -24,12 +24,13 @@ export class AuthService {
         const newUser = this.userRepository.create(details);
         return this.userRepository.save(newUser);
     }
-    // async validateUser(username: string, pass: string): Promise<any> {
-    //   const user = await this.usersService.findOne(username);
-    //   if (user && user.password === pass) {
-    //     const { password, ...result } = user;
-    //     return result;
-    //   }
-    //   return null;
-    // }
+
+    async findUser(id: string) {
+        const user = await this.userRepository.findOneBy({ id });
+        if (user) {
+            return user;
+        }
+        return null;
+    }
+
 }

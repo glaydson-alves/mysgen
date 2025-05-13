@@ -8,6 +8,8 @@ import { ServicesModule } from './services/services.module';
 import { AppointmentsModule } from './appointments/appointments.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { User } from './users/entities/user.entity';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
@@ -17,14 +19,15 @@ import { ConfigModule } from '@nestjs/config';
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DB_HOST,
-      port: process.env.DB_PORT || 3000 as any,
+      port: process.env.DB_PORT || 3306 as any,
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [],
+      entities: [User],
       autoLoadEntities: true,
       synchronize: true,
     }),
+    PassportModule.register({ session: true}),
     UsersModule,
     EnterpriseModule,
     ServicesModule,
