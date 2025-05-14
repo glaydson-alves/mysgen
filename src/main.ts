@@ -8,7 +8,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.use(
     session({
-      secret: 'fa34dj60h78qeklç8ç324j9w-3443sdl77ãda76ihprtfdtry3-e93829cs=sd-=f-=dsn56mb7k8dh9gfdjf9das0sdjasojdla73',
+      secret: process.env.SESSION_SECRET as string,
       saveUninitialized: false,
       resave: false,
       cookie: {
@@ -18,6 +18,6 @@ async function bootstrap() {
   )
   app.use(passport.initialize());
   app.use(passport.session());
-  await app.listen(process.env.PORT ?? 3306);
+  await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

@@ -11,16 +11,16 @@ import { SessionSerializer } from './utils/serializer';
   imports: [
     UsersModule,
     TypeOrmModule.forFeature([User]),
-    PassportModule.register({ session: true}),
+    PassportModule.register({ session: true }),
   ],
   controllers: [AuthController],
   providers: [ 
+    {
+      provide: 'AUTH_SERVICE',
+      useClass: AuthService
+    },
     GoogleStrategy,
-    SessionSerializer,
-  {
-     provide: 'AUTH_SERVICE',
-     useClass: AuthService
-  }
+    SessionSerializer
 ],
 })
 export class AuthModule {}

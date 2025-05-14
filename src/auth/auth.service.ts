@@ -12,15 +12,12 @@ export class AuthService {
     ) {}
 
     async validateUser(details: UserDatails) {
-        console.log('AuthService');
-        console.log(details);
         const user = await this.userRepository.findOneBy({
             email: details.email
         });
-        if (user) {
-            console.log('user', user);
-            return user;
-        }
+        console.log('log aqui validateUser', user);
+        if (user) return user;
+
         const newUser = this.userRepository.create(details);
         return this.userRepository.save(newUser);
     }

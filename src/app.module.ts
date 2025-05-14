@@ -27,7 +27,7 @@ import { PassportModule } from '@nestjs/passport';
       autoLoadEntities: true,
       synchronize: true,
     }),
-    PassportModule.register({ session: true}),
+    PassportModule.register({ session: true }),
     UsersModule,
     EnterpriseModule,
     ServicesModule,
