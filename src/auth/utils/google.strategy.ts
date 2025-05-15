@@ -6,22 +6,17 @@ import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy) {
   constructor(
-   @Inject('AUTH_SERVICE') private readonly authService: AuthService,
+    @Inject('AUTH_SERVICE') private readonly authService: AuthService,
   ) {
     super({
       clientID: process.env.GOOGLE_CLIENT_ID || '',
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-      callbackURL: 'http://localhost:3306/api/auth/google/redirect',
-      scope: ['email', 'profile'],
+      callbackURL: 'http://localhost:3000/api/auth/google/redirect',
+      scope: ['profile', 'email'],
     });
   }
 
-  async validate(
-    accessToken: string,
-    refreshToken: string,
-    profile: Profile,
-    done: VerifyCallback,
-  ): Promise<any> {
+  async validate(accessToken: string, refreshToken: string, profile: Profile) {
     const { displayName, emails, photos } = profile as any;
     const email = emails[0].value;
     const url_avatar = photos[0].value;
@@ -32,13 +27,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
       url_avatar,
     });
     console.log('validate', user);
-    return done(null, user);
-
-    // if (!user) {
-    //   console.log('Usuário não encontrado ou erro na validação.');
-    //   return done(new UnauthorizedException('Usuário não autorizado'));
-    // }
-    // console.log('user em strategy', user);
-    // return done(null, user);
+    return user || null;
   }
 }
