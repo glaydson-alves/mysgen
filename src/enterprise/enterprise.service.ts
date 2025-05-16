@@ -21,7 +21,10 @@ export class EnterpriseService {
     if (existingEnterprise) {
       throw new BadRequestException('User already has an enterprise');
     }
-    const enterprise = this.enterpriseRespository.create(createEnterpriseDto)
+    const enterprise = this.enterpriseRespository.create({
+      ...createEnterpriseDto,
+      user: { id: userId },
+    })
     await this.enterpriseRespository.save(enterprise);
 
     const user = await this.userRepository.findOne({ where: { id: userId } });
