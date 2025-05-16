@@ -7,10 +7,10 @@ export type UserDatails = {
 }
 
 export type AuthJwtPayload = {
-    sub: string;
+    sub: number;
 };
 
 export type CurrentUser = {
-    id: string;
+    id: number;
     role: UserRole;
 };

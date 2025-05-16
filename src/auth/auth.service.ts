@@ -23,7 +23,7 @@ export class AuthService {
         return this.userRepository.save(newUser);
     }
 
-    async findUser(id: string) {
+    async findUser(id: number) {
         const user = await this.userRepository.findOneBy({ id });
         if (user) {
             return user;
@@ -41,7 +41,7 @@ export class AuthService {
         } 
     }
 
-    async validateJwtUser(id: string) {
+    async validateJwtUser(id: number) {
         const user = await this.userRepository.findOneBy({ id });
         if (!user) throw new UnauthorizedException('User not found!');
         const currentUser: CurrentUser = { id: user.id, role: user.role };

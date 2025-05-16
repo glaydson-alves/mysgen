@@ -1,11 +1,36 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateEnterpriseDto } from './dto/create-enterprise.dto';
 import { UpdateEnterpriseDto } from './dto/update-enterprise.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Enterprise } from './entities/enterprise.entity';
+import { Repository } from 'typeorm';
+import { User, UserRole } from 'src/users/entities/user.entity';
+import { ResponseDto } from 'src/common/dto/response/response';
 
 @Injectable()
 export class EnterpriseService {
-  create(createEnterpriseDto: CreateEnterpriseDto) {
-    return 'This action adds a new enterprise';
+  constructor(
+    @InjectRepository(Enterprise)
+    private readonly enterpriseRespository: Repository<Enterprise>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+  ) {}
+
+  async createEnterprise(userId: number, createEnterpriseDto: CreateEnterpriseDto) {
+    const existingEnterprise = await this.enterpriseRespository.findOne({ where: { user: { id: userId } } });
+    if (existingEnterprise) {
+      throw new BadRequestException('User already has an enterprise');
+    }
+    const enterprise = this.enterpriseRespository.create(createEnterpriseDto)
+    await this.enterpriseRespository.save(enterprise);
+
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    if (user) {
+      user.role = UserRole.ADMIN;
+      await this.userRepository.save(user);
+    }
+    console.log('Enterprise created:', enterprise, new ResponseDto('Created successfully', enterprise));
+    return new ResponseDto('Created successfully', enterprise);
   }
 
   findAll() {

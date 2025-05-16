@@ -1,14 +1,15 @@
 import { Service } from "src/services/entities/service.entity";
 import { User } from "src/users/entities/user.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity('enterprise')
 export class Enterprise {
-    @PrimaryGeneratedColumn('uuid')
-    id: string;
+    // @PrimaryGeneratedColumn('uuid')
+    @PrimaryGeneratedColumn()
+    id: number;
 
     @Column()
-    user_id: string;
+    user_id: number;
 
     @OneToOne(() => User, (user) => user.enterprise)
     @JoinColumn({ name: 'user_id' })
@@ -39,7 +40,10 @@ export class Enterprise {
     slug: string;
 
     @CreateDateColumn()
-    created_at: Date;
+    created_at: string;
+
+    @UpdateDateColumn()
+    updated_at: string;
 
     @OneToMany(() => Service, (service) => service.enterprise)
     services: Service[];
