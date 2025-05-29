@@ -1,9 +1,9 @@
 export class ResponseDto<T = any> {
     message: string;
-    data: T;
+    response: T;
 
-    constructor(message: string, data: T) {
+    constructor(message: string, response: T) {
         this.message = message;
-        this.data = data;
+        this.response = response;
     }
 }
