@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
 import { CreateEnterpriseDto } from './dto/create-enterprise.dto';
 import { UpdateEnterpriseDto } from './dto/update-enterprise.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -42,20 +42,38 @@ export class EnterpriseService {
   //   return `This action returns all enterprise`;
   // }
 
-  async findOne(id: number) {
+  async findOne(id: number, userId: number) {
     const enterprise = await this.enterpriseRespository.findOne({
-      where: {id}
+      where: {id},
+      relations: ['user'],
     })
-    // aqui so pode exibir caso o id atenticado seja o mesmo que o user_id em enterprise
     if (!enterprise) {
       throw new BadRequestException(`Enterprise with ID ${id} not found`)
+    }
+    if (enterprise.user.id !== userId) {
+      throw new ForbiddenException('You are not authorized to access this enterprise');
     }
     return new ResponseDto('Enterprise found', enterprise);
   }
 
-  // update(id: number, updateEnterpriseDto: UpdateEnterpriseDto) {
-  //   return `This action updates a #${id} enterprise`;
-  // }
+  async update(id: number, updateEnterpriseDto: UpdateEnterpriseDto, userId: number) {
+    const enterprise = await this.enterpriseRespository.findOne({ 
+      where: { id },
+      relations: ['user'],
+    })
+    if (!enterprise) {
+      throw new BadRequestException(`Enterprise with ID ${id} not found`);
+    }
+  
+    if (enterprise.user.id !== userId) {
+      throw new ForbiddenException('You are not authorized to update this enterprise');
+    }
+  
+    Object.assign(enterprise, updateEnterpriseDto);
+    await this.enterpriseRespository.save(enterprise);
+  
+    return new ResponseDto('Enterprise updated successfully', enterprise);
+  }
 
   // remove(id: number) {
   //   return `This action removes a #${id} enterprise`;

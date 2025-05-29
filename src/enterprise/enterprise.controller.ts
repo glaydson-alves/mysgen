@@ -24,14 +24,25 @@ export class EnterpriseController {
   // }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.enterpriseService.findOne(+id);
+  @UseGuards(JwtAuthGuard)
+  findOne(
+    @Param('id') id: string,
+    @Req() req
+  ) {
+    const userId = req.user.id as number;
+    return this.enterpriseService.findOne(+id, +userId);
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateEnterpriseDto: UpdateEnterpriseDto) {
-  //   return this.enterpriseService.update(+id, updateEnterpriseDto);
-  // }
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard)
+  update(
+    @Param('id') id: string,
+    @Body() updateEnterpriseDto: UpdateEnterpriseDto,
+    @Req() req,
+  ) {
+    const userId = req.user.id as number;
+    return this.enterpriseService.update(+id, updateEnterpriseDto, userId);
+  }
 
   // @Delete(':id')
   // remove(@Param('id') id: string) {
