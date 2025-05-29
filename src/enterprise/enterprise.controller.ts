@@ -23,10 +23,10 @@ export class EnterpriseController {
   //   return this.enterpriseService.findAll();
   // }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.enterpriseService.findOne(+id);
-  // }
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.enterpriseService.findOne(+id);
+  }
 
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateEnterpriseDto: UpdateEnterpriseDto) {

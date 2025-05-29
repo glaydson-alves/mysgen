@@ -21,6 +21,9 @@ export class EnterpriseService {
     if (existingEnterprise) {
       throw new BadRequestException('User already has an enterprise');
     }
+
+    // verificar se tem token e se é valido, se nao tiver retorna um erro 
+
     const enterprise = this.enterpriseRespository.create({
       ...createEnterpriseDto,
       user: { id: userId },
@@ -32,23 +35,29 @@ export class EnterpriseService {
       user.role = UserRole.ADMIN;
       await this.userRepository.save(user);
     }
-    console.log('Enterprise created:', enterprise, new ResponseDto('Created successfully', enterprise));
     return new ResponseDto('Created successfully', enterprise);
   }
 
-  findAll() {
-    return `This action returns all enterprise`;
+  // findAll() {
+  //   return `This action returns all enterprise`;
+  // }
+
+  async findOne(id: number) {
+    const enterprise = await this.enterpriseRespository.findOne({
+      where: {id}
+    })
+    // aqui so pode exibir caso o id atenticado seja o mesmo que o user_id em enterprise
+    if (!enterprise) {
+      throw new BadRequestException(`Enterprise with ID ${id} not found`)
+    }
+    return new ResponseDto('Enterprise found', enterprise);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} enterprise`;
-  }
+  // update(id: number, updateEnterpriseDto: UpdateEnterpriseDto) {
+  //   return `This action updates a #${id} enterprise`;
+  // }
 
-  update(id: number, updateEnterpriseDto: UpdateEnterpriseDto) {
-    return `This action updates a #${id} enterprise`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} enterprise`;
-  }
+  // remove(id: number) {
+  //   return `This action removes a #${id} enterprise`;
+  // }
 }
