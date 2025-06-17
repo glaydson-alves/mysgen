@@ -15,6 +15,11 @@ export class UsersService {
   ) {}
 
   async update(id: number, updateUserDto: UpdateUserDto){
+    
+    if (!updateUserDto  || Object.keys(updateUserDto).length === 0) {
+      throw new BadRequestException('Update data cannot be empty');
+    }
+
     if(!updateUserDto.url_avatar){
       delete updateUserDto.url_avatar
     }
