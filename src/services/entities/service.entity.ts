@@ -4,8 +4,9 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, Pri
 
 @Entity('service')
 export class Service {
-    @PrimaryGeneratedColumn('uuid')
-    id: string;
+    // @PrimaryGeneratedColumn('uuid')
+    @PrimaryGeneratedColumn()
+    id: number;
 
     @Column()
     enterprise_id: string;
