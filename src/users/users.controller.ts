@@ -1,9 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
+import { Controller, Body, Patch, UseGuards, Req } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/auth/utils/guards/jwt.auth.guard';
-import { IRequestWithUser } from 'src/common/interface/request-with-user';
+import { IRequestWithUser } from 'src/common/interface/request-with-user.interface';
 
 @Controller('users')
 @UseGuards(JwtAuthGuard)
