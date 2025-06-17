@@ -3,7 +3,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/auth/utils/guards/jwt.auth.guard';
-import { RequestWithUser } from 'src/common/interface/request-with-user';
+import { IRequestWithUser } from 'src/common/interface/request-with-user';
 
 @Controller('users')
 @UseGuards(JwtAuthGuard)
@@ -12,7 +12,7 @@ export class UsersController {
 
   @Patch('me')
   @UseGuards(JwtAuthGuard)
-  async updateMe(@Body() updateUserDto: UpdateUserDto, @Req() req: RequestWithUser) {
+  async updateMe(@Body() updateUserDto: UpdateUserDto, @Req() req: IRequestWithUser) {
     const user = req.user as {id: number}
     return this.usersService.update(user.id, updateUserDto);
   }
