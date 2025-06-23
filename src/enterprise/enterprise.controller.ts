@@ -10,7 +10,7 @@ export class EnterpriseController {
 
   @Post('create')
   @UseGuards(JwtAuthGuard)
-  async createEnterprise(@Req() req, @Body() createEnterpriseDto: CreateEnterpriseDto) {
+  async createEnterprise(@Req() req: any, @Body() createEnterpriseDto: CreateEnterpriseDto) {
     const userId = req.user.id as number;
     const enterprise = await this.enterpriseService.createEnterprise(userId, createEnterpriseDto);
     return enterprise;
@@ -27,7 +27,7 @@ export class EnterpriseController {
   @UseGuards(JwtAuthGuard)
   findOne(
     @Param('id') id: string,
-    @Req() req
+    @Req() req: any,
   ) {
     const userId = req.user.id as number;
     return this.enterpriseService.findOne(+id, +userId);
@@ -38,7 +38,7 @@ export class EnterpriseController {
   update(
     @Param('id') id: string,
     @Body() updateEnterpriseDto: UpdateEnterpriseDto,
-    @Req() req,
+    @Req() req: any,
   ) {
     const userId = req.user.id as number;
     return this.enterpriseService.update(+id, updateEnterpriseDto, userId);
