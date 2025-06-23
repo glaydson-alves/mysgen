@@ -9,7 +9,7 @@ export class Service {
     id: number;
 
     @Column()
-    enterprise_id: string;
+    enterprise_id: number;
 
     @ManyToOne(() => Enterprise, (enterprise) => enterprise.services)
     @JoinColumn({ name: 'enterprise_id' })
