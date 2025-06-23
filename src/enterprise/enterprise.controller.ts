@@ -3,6 +3,8 @@ import { EnterpriseService } from './enterprise.service';
 import { CreateEnterpriseDto } from './dto/create-enterprise.dto';
 import { UpdateEnterpriseDto } from './dto/update-enterprise.dto';
 import { JwtAuthGuard } from 'src/auth/utils/guards/jwt.auth.guard';
+import { UserRole } from 'src/users/entities/user.entity';
+import { Roles } from 'src/auth/utils/decorators/roles.decorator';
 
 @Controller('enterprise')
 export class EnterpriseController {
@@ -35,6 +37,7 @@ export class EnterpriseController {
 
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
+  @Roles(UserRole.ADMIN)
   update(
     @Param('id') id: string,
     @Body() updateEnterpriseDto: UpdateEnterpriseDto,
