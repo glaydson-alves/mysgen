@@ -11,18 +11,18 @@ export enum AppointmentStatus {
 
 @Entity('appointment')
 export class Appointment {
-    @PrimaryGeneratedColumn('uuid')
-    id: string;
+    @PrimaryGeneratedColumn()
+    id: number;
 
     @Column()
-    user_id: string;
+    user_id: number;
   
     @ManyToOne(() => User, (user) => user.appointments)
     @JoinColumn({ name: 'user_id' })
     user: User;
   
     @Column()
-    service_id: string;
+    service_id: number;
   
     @ManyToOne(() => Service, (service) => service.appointment)
     @JoinColumn({ name: 'service_id' })
