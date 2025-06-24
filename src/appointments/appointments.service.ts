@@ -47,6 +47,7 @@ export class AppointmentsService {
 
     await this.appointmentRepository.save(appointment);
     return new ResponseDto('Appointment created successfully', appointment)
+    // falta a logica de nao agendar no mesmo horario o usuario logado
   }
 
   findUserAppointments() {
