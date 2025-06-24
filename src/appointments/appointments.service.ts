@@ -205,7 +205,22 @@ export class AppointmentsService {
     });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} appointment`;
+  async remove(id: number, user: User) {
+    const appointment = await this.appointmentRepository.findOne({
+      where: { id },
+      relations: ['user'],
+    });
+  
+    if (!appointment) {
+      throw new NotFoundException('Appointment not found');
+    }
+  
+    if (user.role !== UserRole.ADMIN && appointment.user.id !== user.id) {
+      throw new ForbiddenException('You do not have permission to delete this appointment');
+    }
+  
+    await this.appointmentRepository.delete(id);
+    return new ResponseDto('Appointment deleted successfully', { id });
   }
+  
 }
