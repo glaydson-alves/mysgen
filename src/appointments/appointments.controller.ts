@@ -13,30 +13,30 @@ export class AppointmentsController {
   constructor(private readonly appointmentsService: AppointmentsService) {}
 
   @Post()
+  @Roles(UserRole.USER)
   create(@Req() req: any, @Body() createAppointmentDto: CreateAppointmentDto) {
     return this.appointmentsService.create(req.user.id, createAppointmentDto);
   }
 
-  // @Get()
-  // @Roles(UserRole.USER)
-  // findUserAppointments(@Req() req: any) {
-  //   return this.appointmentsService.findUserAppointments(req.user.id);
-  // }
-
-  // @Get()
-  // @Roles(UserRole.ADMIN)
-  // findAdminAppointments(@Req() req: any) {
-  //   return this.appointmentsService.findAdminAppointments(req.user.id);
-  // }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.appointmentsService.findOne(+id);
+  @Get('all')
+  @Roles(UserRole.ADMIN)
+  findAdminAppointments(@Req() req: any) {
+    return this.appointmentsService.findAdminAppointments(req.user.id);
   }
 
+  @Get('me')
+  findUserAppointments(@Req() req: any) {
+    return this.appointmentsService.findUserAppointments(req.user.id);
+  }
+  
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAppointmentDto: UpdateAppointmentDto) {
-    return this.appointmentsService.update(+id, updateAppointmentDto);
+  update(@Param('id') id: number, @Body() updateAppointmentDto: UpdateAppointmentDto, @Req() req: any) {
+    return this.appointmentsService.update(+id, updateAppointmentDto, req.user);
+  }
+
+  @Patch(':id/cancel')
+  cancel(@Param('id') id: number, @Req() req: any) {
+    return this.appointmentsService.cancel(+id, req.user);
   }
 
   @Delete(':id')
