@@ -36,9 +36,15 @@ export class AuthService {
             sub: user.id,
             role: user.role,
         };
-        return {
-            access_token: this.jwtService.sign(payload),
-        } 
+        const access_token = this.jwtService.sign(payload, {
+            expiresIn: '15m',
+        })
+
+        const refresh_token = this.jwtService.sign(payload, {
+            expiresIn: '7d',
+        })
+
+        return { access_token, refresh_token }; 
     }
 
     async validateJwtUser(id: number) {
@@ -48,4 +54,14 @@ export class AuthService {
         return currentUser;
     }
 
+    async validateRefreshToken(refreshToken: string) {
+        try {
+            const decoded = this.jwtService.verify(refreshToken);
+            const user =await this.findUser(decoded.sub);
+            if (!user) { throw new UnauthorizedException() };
+            return user;
+        } catch (error) {
+            throw new UnauthorizedException('Invalid or expired refresh token', error);
+        }
+    }
 }
