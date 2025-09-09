@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/entities/user.entity';
-import { Repository } from 'typeorm';
+import { IsNull, Not, Repository } from 'typeorm';
 import { CurrentUser, UserDatails } from 'src/common/types/types';
 
 @Injectable()
@@ -14,13 +14,19 @@ export class AuthService {
     ) {}
 
     async validateUser(details: UserDatails) {
-        const user = await this.userRepository.findOneBy({
-            email: details.email
+        let user = await this.userRepository.findOne({
+            where: { email: details.email },
         });
-        if (user) return user;
 
-        const newUser = this.userRepository.create(details);
-        return this.userRepository.save(newUser);
+        if (!user) {
+            user = this.userRepository.create(details);
+            user = await this.userRepository.save(user);
+        }
+
+        const hasEnterprise = await this.userRepository.exists({
+            where: { id: user.id, enterprise: { id: Not(IsNull()) } },
+        });
+        return { user, hasEnterprise };
     }
 
     async findUser(id: number) {
