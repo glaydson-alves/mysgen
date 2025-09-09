@@ -19,6 +19,9 @@ export class Enterprise {
     public_name: string;
 
     @Column()
+    whatsapp_number: string;
+
+    @Column()
     address: string;
 
     @Column()

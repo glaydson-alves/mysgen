@@ -3,6 +3,8 @@ export class CreateEnterpriseDto {
     @IsString()
     public_name: string;
     @IsString()
+    whatsapp_number: string;
+    @IsString()
     address: string;
     @IsString()
     logo_url: string;
