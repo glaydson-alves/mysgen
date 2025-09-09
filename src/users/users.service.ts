@@ -14,6 +14,15 @@ export class UsersService {
     private userRepository: Repository<User>,
   ) {}
 
+  async findOneWithRelations(id: number) {
+    const user = await this.userRepository.findOne({
+      where: { id },
+      relations: ['enterprise', 'appointments'],
+    });
+    if (!user) throw new NotFoundException('User not found');
+    return user;
+  }
+
   async update(id: number, updateUserDto: UpdateUserDto){
     
     if (!updateUserDto  || Object.keys(updateUserDto).length === 0) {
