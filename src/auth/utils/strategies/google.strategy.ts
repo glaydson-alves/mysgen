@@ -21,12 +21,12 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
     const email = emails[0].value;
     const url_avatar = photos[0].value;
 
-    const user = await this.authService.validateUser({
+    const { user, hasEnterprise } = await this.authService.validateUser({
       email,
       displayName,
       url_avatar,
     });
     const jwt = await this.authService.generateJwt(user);
-    return done(null, { user, token: jwt });
+    return done(null, { user, token: jwt, hasEnterprise });
   }
 }
